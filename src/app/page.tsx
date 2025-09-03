@@ -1,9 +1,12 @@
 
 'use client';
 export default function Home() {
+  const getDeviceId = () => {
+    window.location.href = "/device";
+  };
   const issues = [
     { id: 1, title: "Web Push Notification", action: () => alert("Web Push Notification") },
-    { id: 2, title: "Get Device ID", action: () => alert("Get Device ID") },
+    { id: 2, title: "Get Device ID", action: () => getDeviceId() },
     { id: 3, title: "Scan QR Code", action: () => alert("Scan QR Code") },
     { id: 4, title: "Open Camera", action: () => alert("Open Camera") },
   ];
@@ -16,7 +19,7 @@ export default function Home() {
           <button
             key={issue.id}
             onClick={issue.action}
-            className="w-full bg-red-600 text-white py-3 px-4 rounded-xl shadow hover:bg-red-800 transition"
+            className="w-full bg-red-600 text-white font-bold py-3 px-4 rounded-xl shadow hover:bg-red-800 transition hover:cursor-pointer"
           >
             {issue.title}
           </button>
