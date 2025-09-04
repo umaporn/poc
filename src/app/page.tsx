@@ -7,10 +7,13 @@ export default function Home() {
   const openCamera = () => {
     window.location.href = "/camera";
   } 
+  const openQRCodeScanner = () => {
+    window.location.href = "/qrcode";
+  }
   const issues = [
     { id: 1, title: "Web Push Notification", action: () => alert("Web Push Notification") },
     { id: 2, title: "Get Device ID", action: () => getDeviceId() },
-    { id: 3, title: "Scan QR Code", action: () => alert("Scan QR Code") },
+    { id: 3, title: "Scan QR Code", action: () => openQRCodeScanner() },
     { id: 4, title: "Open Camera", action: () => openCamera() },
   ];
 
