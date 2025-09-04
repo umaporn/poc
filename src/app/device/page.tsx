@@ -25,7 +25,7 @@ export default function DevicePage() {
   };
 
   return (
-    <div className="items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 p-8 rounded-lg shadow-md w-[70%] mx-auto">
+    <div className="items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 p-8 rounded-lg shadow-md w-[90%] mx-auto">
 			<h1 className="text-2xl font-bold text-gray-800 mb-4">
 				🔑 Your Device ID
 			</h1>

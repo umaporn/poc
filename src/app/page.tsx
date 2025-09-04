@@ -4,11 +4,14 @@ export default function Home() {
   const getDeviceId = () => {
     window.location.href = "/device";
   };
+  const openCamera = () => {
+    window.location.href = "/camera";
+  } 
   const issues = [
     { id: 1, title: "Web Push Notification", action: () => alert("Web Push Notification") },
     { id: 2, title: "Get Device ID", action: () => getDeviceId() },
     { id: 3, title: "Scan QR Code", action: () => alert("Scan QR Code") },
-    { id: 4, title: "Open Camera", action: () => alert("Open Camera") },
+    { id: 4, title: "Open Camera", action: () => openCamera() },
   ];
 
   return (
