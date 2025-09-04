@@ -2,11 +2,13 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { BrowserMultiFormatReader } from '@zxing/library';
+import { Icon } from '@iconify/react';
 
 export default function QRCodeReader() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [result, setResult] = useState<string>('');
   const [isScanning, setIsScanning] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string>('');
   const [reader, setReader] = useState<BrowserMultiFormatReader | null>(null);
 
@@ -48,11 +50,14 @@ export default function QRCodeReader() {
 
       reader.decodeFromVideoDevice(selectedDeviceId, videoRef.current, (result, err) => {
         if (result) {
-          setResult(result.getText());
-          stopScan();
+          setIsLoading(true); 
+          setTimeout(() => {
+            setResult(result.getText());
+            setIsLoading(false);
+            stopScan();
+          }, 2000);
         }
         if (err && !(err instanceof Error)) {
-          // Only log actual errors, not the continuous scanning attempts
           console.log('Scanning...');
         }
       });
@@ -67,10 +72,12 @@ export default function QRCodeReader() {
       reader.reset();
     }
     setIsScanning(false);
+    setIsLoading(false);
   };
 
   const clearResult = () => {
     setResult('');
+    setIsLoading(false);
   };
 
   return (
@@ -81,8 +88,7 @@ export default function QRCodeReader() {
           <p className="mt-2 opacity-90">Scan QR codes with your camera</p>
         </div>
 
-        <div className="p-6 space-y-6">
-          {/* Camera View */}
+        <div className="p-6 space-y-6"> 
           <div className="relative">
             <video
               ref={videoRef}
@@ -91,23 +97,19 @@ export default function QRCodeReader() {
             />
             {!isScanning && (
               <div className="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center">
-                <div className="text-center text-gray-500">
-                  <svg className="mx-auto h-12 w-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
+                <div className="text-gray-500 items-center justify-center flex flex-col">
+									<Icon icon="bx:scan" width="100" height="100"  className='text-gray-300' /> 
                   <p>Camera preview will appear here</p>
                 </div>
               </div>
             )}
           </div>
-
-          {/* Controls */}
+ 
           <div className="flex gap-3">
             {!isScanning ? (
               <button
                 onClick={startScan}
-                className="flex-1 bg-blue-400 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                className="flex-1 bg-blue-400 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-500 transition-colors"
               >
                 Start Scanning
               </button>
@@ -120,8 +122,7 @@ export default function QRCodeReader() {
               </button>
             )}
           </div>
-
-          {/* Error Display */}
+ 
           {error && (
             <div className="bg-red-50 border border-red-200 rounded-lg p-4">
               <div className="flex items-center">
@@ -132,16 +133,23 @@ export default function QRCodeReader() {
               </div>
             </div>
           )}
-
-          {/* Result Display */}
-          {result && (
+ 
+          {isLoading && (
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-center justify-center">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600 mr-3"></div>
+                <p className="text-blue-800 font-medium">Processing QR Code...</p>
+              </div>
+            </div>
+          )}
+ 
+          {result && !isLoading && (
             <div className="bg-green-50 border border-green-200 rounded-lg p-4">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
                   <h3 className="text-green-800 font-medium mb-2">QR Code Detected:</h3>
                   <p className="text-green-700 break-all text-sm">{result}</p>
-                  
-                  {/* Action buttons for different result types */}
+                   
                   <div className="mt-3 flex gap-2">
                     {result.startsWith('http') && (
                       <a
