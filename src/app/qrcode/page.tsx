@@ -1,114 +1,168 @@
-"use client";
+'use client';
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
+import { BrowserMultiFormatReader } from '@zxing/library';
+import { Icon } from '@iconify/react';
 
-export default function QRReaderPage() {
-  const videoRef = useRef<HTMLVideoElement | null>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  const [result, setResult] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
-  const [scanning, setScanning] = useState(false);
+export default function QRCodeReader() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [result, setResult] = useState<string>('');
+  const [isScanning, setIsScanning] = useState(false);
+  const [error, setError] = useState<string>('');
+  const [reader, setReader] = useState<BrowserMultiFormatReader | null>(null);
 
-  const hasBarcodeDetector = typeof window !== "undefined" && "BarcodeDetector" in window;
+  useEffect(() => {
+    const codeReader = new BrowserMultiFormatReader();
+    setReader(codeReader);
 
-  const stopCamera = useCallback(() => {
-    if (videoRef.current?.srcObject) {
-      const tracks = (videoRef.current.srcObject as MediaStream).getTracks();
-      tracks.forEach((t) => t.stop());
-      videoRef.current.srcObject = null;
-    }
-    setScanning(false);
+    return () => {
+      if (codeReader) {
+        codeReader.reset();
+      } 
+    };
   }, []);
 
-  const startCamera = useCallback(async () => {
-    setError(null);
-    setResult(null);
-    setScanning(true);
+  const startScan = async () => {
+    if (!reader || !videoRef.current) return;
 
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { facingMode: "environment", width: { ideal: 1280 }, height: { ideal: 720 } },
-        audio: false,
-      });
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        await videoRef.current.play();
+      setError('');
+      setIsScanning(true);
+
+      const videoInputDevices = await reader.listVideoInputDevices();
+      
+      if (videoInputDevices.length === 0) {
+        throw new Error('No camera devices found');
       }
-      if (hasBarcodeDetector) startDetectLoop();
-    } catch (e: any) {
-      setError(e?.message || "Failed to access camera");
-      setScanning(false);
-    }
-  }, [hasBarcodeDetector]);
 
-  const startDetectLoop = useCallback(() => {
-    const detector = new (window as any).BarcodeDetector({ formats: ["qr_code"] });
+      // Use the first available camera (usually back camera on mobile)
+      const selectedDeviceId = videoInputDevices[0].deviceId;
 
-    const tick = async () => {
-      if (!videoRef.current || !canvasRef.current) return;
-
-      const video = videoRef.current;
-      const canvas = canvasRef.current;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
-
-      // Draw full video frame
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-      try {
-        const barcodes = await detector.detect(canvas);
-        if (barcodes.length > 0) {
-          setResult(barcodes[0].rawValue || "");
-          stopCamera();
-          return;
+      reader.decodeFromVideoDevice(selectedDeviceId, videoRef.current, (result, err) => {
+        if (result) {
+          setResult(result.getText());
+          stopScan();
         }
-      } catch {
-        // ignore
-      }
+        if (err && !(err instanceof Error)) {
+          // Only log actual errors, not the continuous scanning attempts
+          console.log('Scanning...');
+        }
+      });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to start camera');
+      setIsScanning(false);
+    }
+  };
 
-      if (scanning) requestAnimationFrame(tick);
-    };
-    tick();
-  }, [scanning, stopCamera]);
+  const stopScan = () => {
+    if (reader) {
+      reader.reset();
+    }
+    setIsScanning(false);
+  };
+
+  const clearResult = () => {
+    setResult('');
+  };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
-      <h1 className="text-2xl font-semibold mb-4">QR Code Scanner</h1>
+    <div className="min-h-screen bg-gray-50 py-8 px-4">
+      <div className="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden">
+        <div className="bg-blue-400 text-white p-6 text-center">
+          <h1 className="text-2xl font-bold">QR Code Reader</h1>
+          <p className="mt-2 opacity-90">Scan QR codes with your camera</p>
+        </div>
 
-      <div className="relative w-full max-w-3xl overflow-hidden rounded-2xl bg-gray-100">
-        <video ref={videoRef} playsInline className="w-full aspect-video object-cover" />
-        <canvas ref={canvasRef} className="hidden" />
-        {!scanning && (
-          <div className="absolute inset-0 grid place-items-center bg-black/50">
-            <p className="text-neutral-300 text-sm">Camera idle</p>
+        <div className="p-6 space-y-6">
+          {/* Camera View */}
+          <div className="relative">
+            <video
+              ref={videoRef}
+              className="w-full h-64 bg-black rounded-lg object-cover"
+              style={{ display: isScanning ? 'block' : 'none' }}
+            />
+            {!isScanning && (
+              <div className="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center mx-auto">
+                <div className="text-gray-500 items-center justify-center flex flex-col">
+								<Icon icon="bx:scan" width="100" height="100"  className='text-gray-300' />
+                  <p>Camera preview will appear here</p>
+                </div>
+              </div>
+            )}
           </div>
-        )}
-      </div>
 
-      <div className="mt-4 flex gap-2">
-        <button
-          onClick={startCamera}
-          className="rounded-xl bg-emerald-500 px-4 py-2 text-sm font-medium text-black"
-        >
-          {scanning ? "Restart" : "Start"}
-        </button>
-        <button onClick={stopCamera} className="rounded-xl bg-gray-200 px-4 py-2 text-sm">
-          Stop
-        </button>
-      </div>
+          {/* Controls */}
+          <div className="flex gap-3">
+            {!isScanning ? (
+              <button
+                onClick={startScan}
+                className="flex-1 bg-blue-400 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+              >
+                Start Scanning
+              </button>
+            ) : (
+              <button
+                onClick={stopScan}
+                className="flex-1 bg-red-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-red-700 transition-colors"
+              >
+                Stop Scanning
+              </button>
+            )}
+          </div>
 
-      <div className="mt-4 w-full max-w-3xl rounded-xl border border-neutral-800 p-3">
-        <h2 className="text-sm font-semibold mb-2">Result</h2>
-        {result ? (
-          <p className="text-emerald-400 break-all text-sm">{result}</p>
-        ) : (
-          <p className="text-neutral-400 text-sm">No result yet</p>
-        )}
-      </div>
+          {/* Error Display */}
+          {error && (
+            <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+              <div className="flex items-center">
+                <svg className="h-5 w-5 text-red-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <p className="text-red-800 text-sm">{error}</p>
+              </div>
+            </div>
+          )}
 
-      {error && <p className="mt-2 text-red-400 text-sm">{error}</p>}
+          {/* Result Display */}
+          {result && (
+            <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <h3 className="text-green-800 font-medium mb-2">QR Code Detected:</h3>
+                  <p className="text-green-700 break-all text-sm">{result}</p>
+                  
+                  {/* Action buttons for different result types */}
+                  <div className="mt-3 flex gap-2">
+                    {result.startsWith('http') && (
+                      <a
+                        href={result}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700 transition-colors"
+                      >
+                        Open Link
+                      </a>
+                    )}
+                    <button
+                      onClick={() => navigator.clipboard.writeText(result)}
+                      className="bg-gray-600 text-white px-3 py-1 rounded text-sm hover:bg-gray-700 transition-colors"
+                    >
+                      Copy
+                    </button>
+                  </div>
+                </div>
+                <button
+                  onClick={clearResult}
+                  className="text-green-600 hover:text-green-800 ml-2"
+                >
+                  <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
