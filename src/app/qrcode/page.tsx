@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { BrowserMultiFormatReader } from '@zxing/library';
+import { Icon } from '@iconify/react';
 
 export default function QRCodeReader() {
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -77,13 +78,12 @@ export default function QRCodeReader() {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       <div className="max-w-md mx-auto bg-white rounded-lg shadow-md overflow-hidden">
-        <div className="bg-blue-600 text-white p-6 text-center">
+        <div className="bg-blue-400 text-white p-6 text-center">
           <h1 className="text-2xl font-bold">QR Code Reader</h1>
           <p className="mt-2 opacity-90">Scan QR codes with your camera</p>
         </div>
 
-        <div className="p-6 space-y-6">
-          {/* Camera View */}
+        <div className="p-6 space-y-6"> 
           <div className="relative">
             <video
               ref={videoRef}
@@ -92,11 +92,8 @@ export default function QRCodeReader() {
             />
             {!isScanning && (
               <div className="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center">
-                <div className="text-center text-gray-500">
-                  <svg className="mx-auto h-12 w-12 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
+                <div className="text-gray-500 items-center justify-center flex flex-col">
+									<Icon icon="bx:scan" width="100" height="100"  className='text-gray-300' /> 
                   <p>Camera preview will appear here</p>
                 </div>
               </div>
@@ -108,7 +105,7 @@ export default function QRCodeReader() {
             {!isScanning ? (
               <button
                 onClick={startScan}
-                className="flex-1 bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+                className="flex-1 bg-blue-400 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-500 transition-colors"
               >
                 Start Scanning
               </button>
@@ -173,17 +170,6 @@ export default function QRCodeReader() {
               </div>
             </div>
           )}
-
-          {/* Instructions */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-            <h3 className="text-blue-800 font-medium mb-2">Instructions:</h3>
-            <ul className="text-blue-700 text-sm space-y-1">
-              <li>• Click "Start Scanning" to activate your camera</li>
-              <li>• Point your camera at a QR code</li>
-              <li>• The code will be automatically detected and displayed</li>
-              <li>• Make sure the QR code is well-lit and in focus</li>
-            </ul>
-          </div>
         </div>
       </div>
     </div>
