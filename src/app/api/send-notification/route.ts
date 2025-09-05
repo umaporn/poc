@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import webpush from "web-push";
 import { subscriptions } from "@/libs/subscriptions";
 
-const vapidPublicKey = "BPx8EI1XDioo64UCPQfgIP7hd9cRnatxxRzLXvSEp8kmFZoE9s5qKuELUom917HmK_SKQ87CbWKtq1KIfDszv6s";
-const vapidPrivateKey = "UBdDd2WXN2zr30Wcjb-TCJm4VQLg_yFmyULEAh-HSYs";
+const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+const vapidPrivateKey = process.env.NEXT_PUBLIC_VAPID_PRIVATE_KEY;
 
 if (!vapidPublicKey || !vapidPrivateKey) {
   throw new Error("VAPID public and private keys must be defined in environment variables.");
