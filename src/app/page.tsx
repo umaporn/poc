@@ -11,7 +11,7 @@ export default function Home() {
     window.location.href = "/qrcode";
   }
   const openPWA = () => {
-    window.location.href = "/PWA";
+    window.location.href = "/pwa";
   }
 
   // List of issues
