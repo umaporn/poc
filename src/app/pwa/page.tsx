@@ -49,7 +49,7 @@ export default function Home() {
     } else {
       addDebugLog("Notification API NOT supported", 'error');
     }
-		addDebugLog(`VAPID key : ${process.env.VAPID_PUBLIC_KEY}`);
+		addDebugLog(`VAPID key : ${process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY}`);
     // Check environment variables
     if (process.env.VAPID_PUBLIC_KEY) {
       addDebugLog(`VAPID key found: ${process.env.VAPID_PUBLIC_KEY.substring(0, 20)}...`, 'success');
