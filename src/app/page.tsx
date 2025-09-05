@@ -10,8 +10,13 @@ export default function Home() {
   const openQRCodeScanner = () => {
     window.location.href = "/qrcode";
   }
+  const openPWA = () => {
+    window.location.href = "/PWA";
+  }
+
+  // List of issues
   const issues = [
-    { id: 1, title: "Web Push Notification", action: () => alert("Web Push Notification") },
+    { id: 1, title: "Web Push Notification", action: () => openPWA() },
     { id: 2, title: "Get Device ID", action: () => getDeviceId() },
     { id: 3, title: "Scan QR Code", action: () => openQRCodeScanner() },
     { id: 4, title: "Open Camera", action: () => openCamera() },
