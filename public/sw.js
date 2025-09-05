@@ -1,1 +1,213 @@
-if(!self.define){let e,s={};const a=(a,n)=>(a=new URL(a+".js",n).href,s[a]||new Promise(s=>{if("document"in self){const e=document.createElement("script");e.src=a,e.onload=s,document.head.appendChild(e)}else e=a,importScripts(a),s()}).then(()=>{let e=s[a];if(!e)throw new Error(`Module ${a} didn’t register its module`);return e}));self.define=(n,c)=>{const t=e||("document"in self?document.currentScript.src:"")||location.href;if(s[t])return;let i={};const r=e=>a(e,t),f={module:{uri:t},exports:i,require:r};s[t]=Promise.all(n.map(e=>f[e]||r(e))).then(e=>(c(...e),i))}}define(["./workbox-4754cb34"],function(e){"use strict";importScripts(),self.skipWaiting(),e.clientsClaim(),e.precacheAndRoute([{url:"/_next/app-build-manifest.json",revision:"0155d27af09d103948616d90356fd3bc"},{url:"/_next/static/EJjwTJg1IcHsgGTtRyf9l/_buildManifest.js",revision:"e5d59f1c1e58b33f909dd7e502223f98"},{url:"/_next/static/EJjwTJg1IcHsgGTtRyf9l/_ssgManifest.js",revision:"b6652df95db52feb4daf4eca35380933"},{url:"/_next/static/chunks/121-dc5b4fab61f2f4fb.js",revision:"dc5b4fab61f2f4fb"},{url:"/_next/static/chunks/255-e3bf15caf1f1e0f9.js",revision:"e3bf15caf1f1e0f9"},{url:"/_next/static/chunks/262-7e05872ffd514b5d.js",revision:"7e05872ffd514b5d"},{url:"/_next/static/chunks/4bd1b696-c023c6e3521b1417.js",revision:"c023c6e3521b1417"},{url:"/_next/static/chunks/997-b40f8b20e2e1359a.js",revision:"b40f8b20e2e1359a"},{url:"/_next/static/chunks/app/_not-found/page-f008df2836684ab7.js",revision:"f008df2836684ab7"},{url:"/_next/static/chunks/app/api/save-subscription/route-ac208e7bb82bc115.js",revision:"ac208e7bb82bc115"},{url:"/_next/static/chunks/app/api/send-notification/route-ac208e7bb82bc115.js",revision:"ac208e7bb82bc115"},{url:"/_next/static/chunks/app/camera/page-65f2f44df71007d9.js",revision:"65f2f44df71007d9"},{url:"/_next/static/chunks/app/device/page-94d698c53384ebb9.js",revision:"94d698c53384ebb9"},{url:"/_next/static/chunks/app/layout-80b86a21b50a49b5.js",revision:"80b86a21b50a49b5"},{url:"/_next/static/chunks/app/page-a739483a926963ca.js",revision:"a739483a926963ca"},{url:"/_next/static/chunks/app/pwa/layout-a820198411ca129e.js",revision:"a820198411ca129e"},{url:"/_next/static/chunks/app/pwa/page-08beb410fb6fdcb4.js",revision:"08beb410fb6fdcb4"},{url:"/_next/static/chunks/app/qrcode/page-5d146e2bf76bf319.js",revision:"5d146e2bf76bf319"},{url:"/_next/static/chunks/framework-acd67e14855de5a2.js",revision:"acd67e14855de5a2"},{url:"/_next/static/chunks/main-57e1790501a52f06.js",revision:"57e1790501a52f06"},{url:"/_next/static/chunks/main-app-d57417546d2c4031.js",revision:"d57417546d2c4031"},{url:"/_next/static/chunks/pages/_app-7d307437aca18ad4.js",revision:"7d307437aca18ad4"},{url:"/_next/static/chunks/pages/_error-cb2a52f75f2162e2.js",revision:"cb2a52f75f2162e2"},{url:"/_next/static/chunks/polyfills-42372ed130431b0a.js",revision:"846118c33b2c0e922d7b3a7676f81f6f"},{url:"/_next/static/chunks/webpack-abc4dba7c5868d73.js",revision:"abc4dba7c5868d73"},{url:"/_next/static/css/72913c4d497ac667.css",revision:"72913c4d497ac667"},{url:"/_next/static/css/f30152c0704fba31.css",revision:"f30152c0704fba31"},{url:"/_next/static/media/569ce4b8f30dc480-s.p.woff2",revision:"ef6cefb32024deac234e82f932a95cbd"},{url:"/_next/static/media/747892c23ea88013-s.woff2",revision:"a0761690ccf4441ace5cec893b82d4ab"},{url:"/_next/static/media/8d697b304b401681-s.woff2",revision:"cc728f6c0adb04da0dfcb0fc436a8ae5"},{url:"/_next/static/media/93f479601ee12b01-s.p.woff2",revision:"da83d5f06d825c5ae65b7cca706cb312"},{url:"/_next/static/media/9610d9e46709d722-s.woff2",revision:"7b7c0ef93df188a852344fc272fc096b"},{url:"/_next/static/media/ba015fad6dcf6784-s.woff2",revision:"8ea4f719af3312a055caf09f34c89a77"},{url:"/file.svg",revision:"d09f95206c3fa0bb9bd9fefabfd0ea71"},{url:"/globe.svg",revision:"2aaafa6a49b6563925fe440891e32717"},{url:"/manifest.json",revision:"3f4c805a141d5af39ba7f35c2136aa1b"},{url:"/next.svg",revision:"8e061864f388b47f33a1c3780831193e"},{url:"/vercel.svg",revision:"c0af2f507b369b085b35ef4bbe3bcf1e"},{url:"/window.svg",revision:"a2760511c65806022ad20adf74370ff3"}],{ignoreURLParametersMatching:[]}),e.cleanupOutdatedCaches(),e.registerRoute("/",new e.NetworkFirst({cacheName:"start-url",plugins:[{cacheWillUpdate:async({request:e,response:s,event:a,state:n})=>s&&"opaqueredirect"===s.type?new Response(s.body,{status:200,statusText:"OK",headers:s.headers}):s}]}),"GET"),e.registerRoute(/^https:\/\/fonts\.(?:gstatic)\.com\/.*/i,new e.CacheFirst({cacheName:"google-fonts-webfonts",plugins:[new e.ExpirationPlugin({maxEntries:4,maxAgeSeconds:31536e3})]}),"GET"),e.registerRoute(/^https:\/\/fonts\.(?:googleapis)\.com\/.*/i,new e.StaleWhileRevalidate({cacheName:"google-fonts-stylesheets",plugins:[new e.ExpirationPlugin({maxEntries:4,maxAgeSeconds:604800})]}),"GET"),e.registerRoute(/\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,new e.StaleWhileRevalidate({cacheName:"static-font-assets",plugins:[new e.ExpirationPlugin({maxEntries:4,maxAgeSeconds:604800})]}),"GET"),e.registerRoute(/\.(?:jpg|jpeg|gif|png|svg|ico|webp)$/i,new e.StaleWhileRevalidate({cacheName:"static-image-assets",plugins:[new e.ExpirationPlugin({maxEntries:64,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\/_next\/image\?url=.+$/i,new e.StaleWhileRevalidate({cacheName:"next-image",plugins:[new e.ExpirationPlugin({maxEntries:64,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:mp3|wav|ogg)$/i,new e.CacheFirst({cacheName:"static-audio-assets",plugins:[new e.RangeRequestsPlugin,new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:mp4)$/i,new e.CacheFirst({cacheName:"static-video-assets",plugins:[new e.RangeRequestsPlugin,new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:js)$/i,new e.StaleWhileRevalidate({cacheName:"static-js-assets",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:css|less)$/i,new e.StaleWhileRevalidate({cacheName:"static-style-assets",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\/_next\/data\/.+\/.+\.json$/i,new e.StaleWhileRevalidate({cacheName:"next-data",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:json|xml|csv)$/i,new e.NetworkFirst({cacheName:"static-data-assets",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(({url:e})=>{if(!(self.origin===e.origin))return!1;const s=e.pathname;return!s.startsWith("/api/auth/")&&!!s.startsWith("/api/")},new e.NetworkFirst({cacheName:"apis",networkTimeoutSeconds:10,plugins:[new e.ExpirationPlugin({maxEntries:16,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(({url:e})=>{if(!(self.origin===e.origin))return!1;return!e.pathname.startsWith("/api/")},new e.NetworkFirst({cacheName:"others",networkTimeoutSeconds:10,plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(({url:e})=>!(self.origin===e.origin),new e.NetworkFirst({cacheName:"cross-origin",networkTimeoutSeconds:10,plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:3600})]}),"GET")});
+// public/sw.js
+const CACHE_NAME = 'pwa-cache-v1';
+const STATIC_CACHE_URLS = [
+  '/',
+  '/manifest.json',
+];
+
+// Install event - cache static resources
+self.addEventListener('install', (event) => {
+  console.log('Service Worker: Installing...');
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then((cache) => {
+        console.log('Service Worker: Caching static files');
+        // Only cache files that we know exist
+        return Promise.allSettled(
+          STATIC_CACHE_URLS.map(url => 
+            fetch(url)
+              .then(response => {
+                if (response.ok) {
+                  return cache.put(url, response);
+                } else {
+                  console.warn(`Failed to cache ${url}: ${response.status}`);
+                }
+              })
+              .catch(error => {
+                console.warn(`Failed to fetch ${url}:`, error);
+              })
+          )
+        );
+      })
+      .then(() => {
+        console.log('Service Worker: Installation complete');
+        return self.skipWaiting(); // Activate immediately
+      })
+      .catch(error => {
+        console.error('Service Worker: Installation failed:', error);
+      })
+  );
+});
+
+// Activate event - clean up old caches
+self.addEventListener('activate', (event) => {
+  console.log('Service Worker: Activating...');
+  event.waitUntil(
+    caches.keys()
+      .then((cacheNames) => {
+        return Promise.all(
+          cacheNames.map((cacheName) => {
+            if (cacheName !== CACHE_NAME) {
+              console.log('Service Worker: Deleting old cache:', cacheName);
+              return caches.delete(cacheName);
+            }
+          })
+        );
+      })
+      .then(() => {
+        console.log('Service Worker: Activation complete');
+        return self.clients.claim(); // Take control of all pages
+      })
+  );
+});
+
+// Fetch event - network first, then cache fallback
+self.addEventListener('fetch', (event) => {
+  // Skip non-GET requests
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
+  // Skip chrome-extension and other non-http requests
+  if (!event.request.url.startsWith('http')) {
+    return;
+  }
+
+  event.respondWith(
+    fetch(event.request)
+      .then((response) => {
+        // If successful, clone and cache the response
+        if (response.ok) {
+          const responseClone = response.clone();
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseClone);
+          });
+        }
+        return response;
+      })
+      .catch(() => {
+        // If fetch fails, try to serve from cache
+        return caches.match(event.request)
+          .then((cachedResponse) => {
+            if (cachedResponse) {
+              return cachedResponse;
+            }
+            // If it's a navigation request and we have no cache, return a basic offline page
+            if (event.request.destination === 'document') {
+              return new Response(
+                `<!DOCTYPE html>
+                <html>
+                <head>
+                  <title>Offline</title>
+                  <meta charset="utf-8">
+                  <meta name="viewport" content="width=device-width, initial-scale=1">
+                  <style>
+                    body { font-family: system-ui, sans-serif; text-align: center; padding: 50px; }
+                    h1 { color: #666; }
+                  </style>
+                </head>
+                <body>
+                  <h1>You're offline</h1>
+                  <p>Please check your internet connection and try again.</p>
+                </body>
+                </html>`,
+                {
+                  headers: { 'Content-Type': 'text/html' }
+                }
+              );
+            }
+            // For other requests, throw an error
+            throw new Error('No cache match found');
+          });
+      })
+  );
+});
+
+// Push event - handle incoming push notifications
+self.addEventListener('push', (event) => {
+  console.log('Service Worker: Push event received', event);
+  
+  let notificationData = {
+    title: 'Default Title',
+    body: 'Default body',
+    icon: '/icon-192x192.png',
+    badge: '/badge-72x72.png',
+    tag: 'default',
+    requireInteraction: false,
+    actions: [],
+  };
+
+  // Parse push data if available
+  if (event.data) {
+    try {
+      const data = event.data.json();
+      notificationData = { ...notificationData, ...data };
+    } catch (e) {
+      console.error('Error parsing push data:', e);
+      notificationData.body = event.data.text() || notificationData.body;
+    }
+  }
+
+  const promiseChain = self.registration.showNotification(
+    notificationData.title,
+    {
+      body: notificationData.body,
+      icon: notificationData.icon,
+      badge: notificationData.badge,
+      tag: notificationData.tag,
+      requireInteraction: notificationData.requireInteraction,
+      data: notificationData.data,
+      actions: notificationData.actions,
+    }
+  );
+
+  event.waitUntil(promiseChain);
+});
+
+// Notification click event
+self.addEventListener('notificationclick', (event) => {
+  console.log('Service Worker: Notification clicked', event);
+  
+  event.notification.close();
+
+  // Handle action clicks
+  if (event.action) {
+    console.log('Action clicked:', event.action);
+    // Handle different actions here
+  }
+
+  // Navigate to app
+  const urlToOpen = event.notification.data?.url || '/';
+  
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true })
+      .then((clientList) => {
+        // Check if app is already open
+        for (const client of clientList) {
+          if (client.url.includes(urlToOpen) && 'focus' in client) {
+            return client.focus();
+          }
+        }
+        
+        // Open new window if app is not open
+        if (self.clients.openWindow) {
+          return self.clients.openWindow(urlToOpen);
+        }
+      })
+  );
+});
+
+// Background sync (optional)
+self.addEventListener('sync', (event) => {
+  console.log('Service Worker: Background sync', event.tag);
+  // Handle background sync events here
+});
+
+// Error handling
+self.addEventListener('error', (event) => {
+  console.error('Service Worker error:', event.error);
+});
+
+self.addEventListener('unhandledrejection', (event) => {
+  console.error('Service Worker unhandled rejection:', event.reason);
+});
