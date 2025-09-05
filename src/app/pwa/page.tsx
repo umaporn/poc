@@ -49,10 +49,11 @@ export default function Home() {
     } else {
       addDebugLog("Notification API NOT supported", 'error');
     }
-		addDebugLog(`VAPID key : ${process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY}`);
+		const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY; 
+		addDebugLog(`VAPID key : ${vapidPublicKey!}`);
     // Check environment variables
-    if (process.env.VAPID_PUBLIC_KEY) {
-      addDebugLog(`VAPID key found: ${process.env.VAPID_PUBLIC_KEY.substring(0, 20)}...`, 'success');
+    if (vapidPublicKey) {
+      addDebugLog(`VAPID key found: ${vapidPublicKey.substring(0, 20)}...`, 'success');
     } else {
       addDebugLog("VAPID key NOT found in environment variables", 'error');
     }
