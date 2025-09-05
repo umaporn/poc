@@ -27,6 +27,7 @@ export default function Home() {
   }, []);
 
   async function subscribe() {
+		console.log('Subscribing to push notifications...');
     if (!("serviceWorker" in navigator) || !("PushManager" in window)) {
       alert("Push notifications not supported in this browser.");
       return;
@@ -37,9 +38,10 @@ export default function Home() {
     const subscription = await reg.pushManager.subscribe({
       userVisibleOnly: true,
       applicationServerKey: urlBase64ToUint8Array(
-        process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!
+        process.env.VAPID_PUBLIC_KEY!
       ),
     });
+		console.log('Push Subscription:', subscription);
 
     await fetch("/api/save-subscription", {
       method: "POST",
