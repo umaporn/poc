@@ -201,7 +201,7 @@ export default function ServiceWorkerDebugger() {
       setSwRegistration(registration);
       
       // Monitor registration state
-      const monitorRegistration = (worker: ServiceWorker, name: string) => {
+      const monitorRegistration = (worker: ServiceWorker | null, name: string) => {
         if (worker) {
           addDebugLog(`${name} worker found`);
           addDebugLog(`${name} state: ${worker.state}`);
