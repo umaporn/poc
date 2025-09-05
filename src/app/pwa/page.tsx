@@ -14,38 +14,61 @@ export default function Home() {
   }, []);
 
   async function subscribe() {
-    // Ask permission first
-    const permission = await Notification.requestPermission();
-    if (permission !== "granted") {
-      alert("Please allow notifications to subscribe!");
-      return;
+    try {
+      // Ask permission first
+      const permission = await Notification.requestPermission();
+      if (permission !== "granted") {
+        alert("Please allow notifications to subscribe!");
+        return;
+      }
+
+      const reg = await navigator.serviceWorker.ready;
+      const sub = await reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(
+          process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!
+        ),
+      });
+
+      console.log("Subscription created:", sub);
+
+      // Send subscription to server and wait for response
+      const response = await fetch("/api/send-notification", {
+        method: "POST",
+        body: JSON.stringify({ subscribe: sub }),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.ok) {
+        // Only set subscription state after successful server registration
+        setSubscription(sub);
+        console.log("Successfully subscribed and registered with server");
+      } else {
+        throw new Error("Failed to register subscription with server");
+      }
+    } catch (error) {
+      console.error("Subscription failed:", error);
+      alert("Failed to subscribe. Please try again.");
     }
-
-    const reg = await navigator.serviceWorker.ready;
-    const sub = await reg.pushManager.subscribe({
-      userVisibleOnly: true,
-      applicationServerKey: urlBase64ToUint8Array(
-        process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!
-      ),
-    });
-
-    setSubscription(sub);
-
-    await fetch("/api/send-notification", {
-      method: "POST",
-      body: JSON.stringify({ subscribe: sub }),
-      headers: { "Content-Type": "application/json" },
-    });
-
-    console.log("Subscribed:", sub);
   }
 
   async function sendNotification() {
-    await fetch("/api/send-notification", {
-      method: "POST",
-      body: JSON.stringify({ send: true }),
-      headers: { "Content-Type": "application/json" },
-    });
+    try {
+      const response = await fetch("/api/send-notification", {
+        method: "POST",
+        body: JSON.stringify({ send: true }),
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.ok) {
+        console.log("Notification sent successfully");
+      } else {
+        throw new Error("Failed to send notification");
+      }
+    } catch (error) {
+      console.error("Failed to send notification:", error);
+      alert("Failed to send notification");
+    }
   }
 
   return (
@@ -55,8 +78,9 @@ export default function Home() {
       <button
         onClick={subscribe}
         className="px-4 py-2 bg-blue-500 text-white rounded"
+        disabled={!!subscription}
       >
-        Subscribe
+        {subscription ? "Subscribed ✓" : "Subscribe"}
       </button>
 
       <button
@@ -66,6 +90,12 @@ export default function Home() {
       >
         Send Test Notification
       </button>
+
+      {subscription && (
+        <div className="text-sm text-gray-600">
+          <p>✅ Push notifications enabled</p>
+        </div>
+      )}
     </main>
   );
 }

@@ -1,6 +1,6 @@
 {
   "name": "Next.js PWA Push Demo",
-  "short_name": "PWA Push",
+  "short_name": "PWA WEB Push",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
