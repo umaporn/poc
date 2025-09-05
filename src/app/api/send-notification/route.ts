@@ -1,30 +1,48 @@
 import { NextResponse } from "next/server";
 import webpush from "web-push";
-import { subscriptions } from "@/libs/subscriptions";
 
-const vapidPublicKey = process.env.VAPID_PUBLIC_KEY;
-const vapidPrivateKey = process.env.VAPID_PRIVATE_KEY;
-
-if (!vapidPublicKey || !vapidPrivateKey) {
-  throw new Error("VAPID public and private keys must be defined in environment variables.");
-}
+const vapidKeys = {
+  publicKey: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!,
+  privateKey: process.env.NEXT_PUBLIC_VAPID_PRIVATE_KEY!,
+};
 
 webpush.setVapidDetails(
-  "mailto:test@example.com",
-  vapidPublicKey,
-  vapidPrivateKey
+  "mailto:example@yourdomain.org",
+  vapidKeys.publicKey,
+  vapidKeys.privateKey
 );
+
+// ❗ In-memory store (resets on server restart)
+// Replace with DB or Redis in production
+let subscriptions: any[] = [];
 
 export async function POST(req: Request) {
   const body = await req.json();
-  const payload = JSON.stringify({
-    title: body.title || "Hello from Next.js PWA!",
-    body: body.body || "This is a test push notification.",
-  });
 
-  const results = await Promise.allSettled(
-    subscriptions.map((sub) => webpush.sendNotification(sub, payload))
-  );
+  // Save subscription
+  if (body.subscribe) {
+    subscriptions.push(body.subscribe);
+    console.log("New subscription saved:", body.subscribe.endpoint);
+    return NextResponse.json({ success: true });
+  }
 
-  return NextResponse.json({ results });
+  // Send test notification
+  if (body.send) {
+    const payload = JSON.stringify({
+      title: "Next.js Push Demo 🚀",
+      body: "This is a test notification!",
+    });
+
+    const results = await Promise.all(
+      subscriptions.map((sub) =>
+        webpush.sendNotification(sub, payload).catch((err) => {
+          console.error("Push error:", err.body || err);
+        })
+      )
+    );
+
+    return NextResponse.json({ sent: true, results });
+  }
+
+  return NextResponse.json({ ok: true });
 }
