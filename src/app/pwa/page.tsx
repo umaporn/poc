@@ -1,3 +1,5 @@
+// Fixed version of your component with timeout and better error handling
+
 "use client";
 import { useEffect, useState } from "react";
 
@@ -49,8 +51,10 @@ export default function Home() {
     } else {
       addDebugLog("Notification API NOT supported", 'error');
     }
-		const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY; 
-		addDebugLog(`VAPID key : ${vapidPublicKey!}`);
+    
+    const vapidPublicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY; 
+    addDebugLog(`VAPID key : ${vapidPublicKey!}`);
+    
     // Check environment variables
     if (vapidPublicKey) {
       addDebugLog(`VAPID key found: ${vapidPublicKey.substring(0, 20)}...`, 'success');
@@ -92,6 +96,16 @@ export default function Home() {
     
     if ("serviceWorker" in navigator) {
       try {
+        // First, unregister any existing service workers that might be stuck
+        const existingRegistrations = await navigator.serviceWorker.getRegistrations();
+        addDebugLog(`Found ${existingRegistrations.length} existing service worker registrations`);
+        
+        for (const registration of existingRegistrations) {
+          addDebugLog(`Existing SW scope: ${registration.scope}`);
+          // Optionally unregister old/stuck service workers
+          // await registration.unregister();
+        }
+
         addDebugLog("Attempting to register /sw.js...");
         
         // Check if service worker file exists first
@@ -108,7 +122,8 @@ export default function Home() {
         }
 
         const registration = await navigator.serviceWorker.register('/sw.js', {
-          scope: '/'
+          scope: '/',
+          updateViaCache: 'none' // Don't cache the service worker file
         });
         
         addDebugLog(`Service Worker registered successfully. Scope: ${registration.scope}`, 'success');
@@ -136,6 +151,12 @@ export default function Home() {
           addDebugLog('Service worker is active', 'success');
         }
 
+        // Force activation if there's a waiting service worker
+        if (registration.waiting) {
+          addDebugLog('Forcing service worker activation...', 'warning');
+          registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+        }
+
       } catch (error) {
         addDebugLog(`Service Worker registration failed: ${error}`, 'error');
         console.error('Full error details:', error);
@@ -143,6 +164,25 @@ export default function Home() {
     } else {
       addDebugLog('Service Worker not supported in this browser', 'error');
     }
+  };
+
+  // Helper function to wait for service worker with timeout
+  const waitForServiceWorkerReady = async (timeoutMs = 10000) => {
+    return new Promise<ServiceWorkerRegistration>((resolve, reject) => {
+      const timeout = setTimeout(() => {
+        reject(new Error('Service worker ready timeout'));
+      }, timeoutMs);
+
+      navigator.serviceWorker.ready
+        .then((registration) => {
+          clearTimeout(timeout);
+          resolve(registration);
+        })
+        .catch((error) => {
+          clearTimeout(timeout);
+          reject(error);
+        });
+    });
   };
 
   async function subscribe() {
@@ -175,10 +215,27 @@ export default function Home() {
     }
 
     try {
-      // Wait for service worker to be ready
+      // Wait for service worker to be ready with timeout
       addDebugLog("Waiting for service worker to be ready...");
-      const reg = await navigator.serviceWorker.ready;
-      addDebugLog(`Service Worker is ready. Scope: ${reg.scope}`, 'success');
+      
+      let reg;
+      try {
+        reg = await waitForServiceWorkerReady(10000); // 10 second timeout
+        addDebugLog(`Service Worker is ready. Scope: ${reg.scope}`, 'success');
+      } catch (timeoutError) {
+        addDebugLog(`Service worker ready timeout: ${timeoutError}`, 'error');
+        
+        // Try to get the registration directly
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        if (registrations.length > 0) {
+          reg = registrations[0];
+          addDebugLog(`Using first available registration: ${reg.scope}`, 'warning');
+        } else {
+          addDebugLog("No service worker registrations found", 'error');
+          alert("Service worker not ready. Please refresh the page and try again.");
+          return;
+        }
+      }
 
       // Check if already subscribed
       const existingSubscription = await reg.pushManager.getSubscription();
@@ -189,8 +246,8 @@ export default function Home() {
         return;
       }
 
-      // Prepare VAPID key
-      const vapidKey = process.env.VAPID_PUBLIC_KEY;
+      // Prepare VAPID key - Fixed the variable name!
+      const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY; // This was the bug!
       if (!vapidKey) {
         addDebugLog("VAPID public key is missing from environment variables", 'error');
         alert("VAPID key configuration error. Check console for details.");
@@ -266,6 +323,33 @@ export default function Home() {
       }
     }
   }
+
+  // Add a manual service worker reset function
+  const resetServiceWorker = async () => {
+    addDebugLog("Resetting service worker...");
+    
+    try {
+      const registrations = await navigator.serviceWorker.getRegistrations();
+      for (const registration of registrations) {
+        addDebugLog(`Unregistering: ${registration.scope}`);
+        await registration.unregister();
+      }
+      
+      // Clear all caches
+      const cacheNames = await caches.keys();
+      for (const cacheName of cacheNames) {
+        addDebugLog(`Deleting cache: ${cacheName}`);
+        await caches.delete(cacheName);
+      }
+      
+      addDebugLog("Service worker reset complete. Please refresh the page.", 'success');
+      setSwRegistration(null);
+      setSubscribed(false);
+      
+    } catch (error) {
+      addDebugLog(`Error resetting service worker: ${error}`, 'error');
+    }
+  };
 
   async function sendTestNotification() {
     addDebugLog("Sending test notification...");
@@ -351,7 +435,7 @@ export default function Home() {
 
         <button
           onClick={subscribe}
-          disabled={subscribed || !swRegistration}
+          disabled={subscribed}
           className="px-4 py-2 bg-blue-600 text-white rounded disabled:bg-gray-400 hover:bg-blue-700 transition-colors"
         >
           {subscribed ? "✅ Subscribed" : "🔔 Subscribe to Push"}
@@ -363,6 +447,13 @@ export default function Home() {
           className="px-4 py-2 bg-green-600 text-white rounded disabled:bg-gray-400 hover:bg-green-700 transition-colors"
         >
           🚀 Send Test Notification
+        </button>
+
+        <button
+          onClick={resetServiceWorker}
+          className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
+        >
+          🔄 Reset Service Worker
         </button>
 
         <button
@@ -413,9 +504,10 @@ export default function Home() {
           <div className="mt-4 bg-gray-100 p-4 rounded text-sm">
             <h3 className="font-semibold mb-2">💡 Common Issues & Solutions:</h3>
             <div className="space-y-1 text-xs">
+              <div><strong>❌ Service worker stuck:</strong> Click "Reset Service Worker" button</div>
               <div><strong>❌ Service worker file not found:</strong> Create <code>public/sw.js</code></div>
               <div><strong>❌ Not served over HTTPS:</strong> Push notifications require HTTPS (except localhost)</div>
-              <div><strong>❌ Invalid VAPID key:</strong> Check your <code>NEXT_PUBLIC_VAPID_PUBLIC_KEY</code> in .env.local (using mock key in demo)</div>
+              <div><strong>❌ Invalid VAPID key:</strong> Check your <code>NEXT_PUBLIC_VAPID_PUBLIC_KEY</code> in .env.local</div>
               <div><strong>❌ Permission denied:</strong> User must grant notification permission</div>
               <div><strong>❌ Browser not supported:</strong> Some browsers don't support push notifications</div>
               <div><strong>❌ Server API missing:</strong> Create <code>/api/save-subscription</code> and <code>/api/send-notification</code> endpoints</div>
@@ -434,4 +526,4 @@ function urlBase64ToUint8Array(base64String: string) {
     .replace(/_/g, "/");
   const rawData = atob(base64);
   return Uint8Array.from([...rawData].map((c) => c.charCodeAt(0)));
-}
+}s
