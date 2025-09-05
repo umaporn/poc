@@ -94,8 +94,20 @@ export default function Home() {
       {subscription && (
         <div className="text-sm text-gray-600">
           <p>✅ Push notifications enabled</p>
+          <details className="mt-2">
+            <summary className="cursor-pointer text-blue-500">View Debug Info</summary>
+            <div className="mt-2 p-2 bg-gray-100 rounded text-xs font-mono">
+              <p><strong>Endpoint:</strong> {subscription.endpoint}</p>
+              <p><strong>Keys:</strong> p256dh: {subscription.getKey('p256dh') ? '✓' : '✗'}, auth: {subscription.getKey('auth') ? '✓' : '✗'}</p>
+            </div>
+          </details>
         </div>
       )}
+
+      <div className="text-xs text-gray-500 mt-4 p-2 bg-gray-50 rounded">
+        <p><strong>💡 Debug Tip:</strong> Open browser DevTools → Console to see detailed debug logs</p>
+        <p><strong>🔍 Current State:</strong> Subscription = {subscription ? 'Active' : 'None'}</p>
+      </div>
     </main>
   );
 }
