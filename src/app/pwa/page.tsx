@@ -189,7 +189,7 @@ export default function Home() {
       }
 
       // Prepare VAPID key
-      const vapidKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+      const vapidKey = process.env.VAPID_PUBLIC_KEY;
       if (!vapidKey) {
         addDebugLog("VAPID public key is missing from environment variables", 'error');
         alert("VAPID key configuration error. Check console for details.");
