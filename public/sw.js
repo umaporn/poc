@@ -1,1 +1,307 @@
-if(!self.define){let e,s={};const a=(a,n)=>(a=new URL(a+".js",n).href,s[a]||new Promise(s=>{if("document"in self){const e=document.createElement("script");e.src=a,e.onload=s,document.head.appendChild(e)}else e=a,importScripts(a),s()}).then(()=>{let e=s[a];if(!e)throw new Error(`Module ${a} didn’t register its module`);return e}));self.define=(n,c)=>{const t=e||("document"in self?document.currentScript.src:"")||location.href;if(s[t])return;let i={};const r=e=>a(e,t),f={module:{uri:t},exports:i,require:r};s[t]=Promise.all(n.map(e=>f[e]||r(e))).then(e=>(c(...e),i))}}define(["./workbox-4754cb34"],function(e){"use strict";importScripts(),self.skipWaiting(),e.clientsClaim(),e.precacheAndRoute([{url:"/_next/app-build-manifest.json",revision:"fb36ba3fbce6446b2baa1deb059eb15d"},{url:"/_next/static/QHFJ10TevIyLd18ST4z6y/_buildManifest.js",revision:"e5d59f1c1e58b33f909dd7e502223f98"},{url:"/_next/static/QHFJ10TevIyLd18ST4z6y/_ssgManifest.js",revision:"b6652df95db52feb4daf4eca35380933"},{url:"/_next/static/chunks/121-dc5b4fab61f2f4fb.js",revision:"dc5b4fab61f2f4fb"},{url:"/_next/static/chunks/255-e3bf15caf1f1e0f9.js",revision:"e3bf15caf1f1e0f9"},{url:"/_next/static/chunks/262-7e05872ffd514b5d.js",revision:"7e05872ffd514b5d"},{url:"/_next/static/chunks/4bd1b696-c023c6e3521b1417.js",revision:"c023c6e3521b1417"},{url:"/_next/static/chunks/997-b40f8b20e2e1359a.js",revision:"b40f8b20e2e1359a"},{url:"/_next/static/chunks/app/_not-found/page-f008df2836684ab7.js",revision:"f008df2836684ab7"},{url:"/_next/static/chunks/app/api/save-subscription/route-ac208e7bb82bc115.js",revision:"ac208e7bb82bc115"},{url:"/_next/static/chunks/app/api/send-notification/route-ac208e7bb82bc115.js",revision:"ac208e7bb82bc115"},{url:"/_next/static/chunks/app/camera/page-65f2f44df71007d9.js",revision:"65f2f44df71007d9"},{url:"/_next/static/chunks/app/device/page-94d698c53384ebb9.js",revision:"94d698c53384ebb9"},{url:"/_next/static/chunks/app/layout-80b86a21b50a49b5.js",revision:"80b86a21b50a49b5"},{url:"/_next/static/chunks/app/page-a739483a926963ca.js",revision:"a739483a926963ca"},{url:"/_next/static/chunks/app/pwa/layout-a820198411ca129e.js",revision:"a820198411ca129e"},{url:"/_next/static/chunks/app/pwa/page-5e5ed79c76f3ea94.js",revision:"5e5ed79c76f3ea94"},{url:"/_next/static/chunks/app/qrcode/page-5d146e2bf76bf319.js",revision:"5d146e2bf76bf319"},{url:"/_next/static/chunks/framework-acd67e14855de5a2.js",revision:"acd67e14855de5a2"},{url:"/_next/static/chunks/main-57e1790501a52f06.js",revision:"57e1790501a52f06"},{url:"/_next/static/chunks/main-app-d57417546d2c4031.js",revision:"d57417546d2c4031"},{url:"/_next/static/chunks/pages/_app-7d307437aca18ad4.js",revision:"7d307437aca18ad4"},{url:"/_next/static/chunks/pages/_error-cb2a52f75f2162e2.js",revision:"cb2a52f75f2162e2"},{url:"/_next/static/chunks/polyfills-42372ed130431b0a.js",revision:"846118c33b2c0e922d7b3a7676f81f6f"},{url:"/_next/static/chunks/webpack-abc4dba7c5868d73.js",revision:"abc4dba7c5868d73"},{url:"/_next/static/css/72913c4d497ac667.css",revision:"72913c4d497ac667"},{url:"/_next/static/css/f30152c0704fba31.css",revision:"f30152c0704fba31"},{url:"/_next/static/media/569ce4b8f30dc480-s.p.woff2",revision:"ef6cefb32024deac234e82f932a95cbd"},{url:"/_next/static/media/747892c23ea88013-s.woff2",revision:"a0761690ccf4441ace5cec893b82d4ab"},{url:"/_next/static/media/8d697b304b401681-s.woff2",revision:"cc728f6c0adb04da0dfcb0fc436a8ae5"},{url:"/_next/static/media/93f479601ee12b01-s.p.woff2",revision:"da83d5f06d825c5ae65b7cca706cb312"},{url:"/_next/static/media/9610d9e46709d722-s.woff2",revision:"7b7c0ef93df188a852344fc272fc096b"},{url:"/_next/static/media/ba015fad6dcf6784-s.woff2",revision:"8ea4f719af3312a055caf09f34c89a77"},{url:"/file.svg",revision:"d09f95206c3fa0bb9bd9fefabfd0ea71"},{url:"/globe.svg",revision:"2aaafa6a49b6563925fe440891e32717"},{url:"/manifest.json",revision:"3f4c805a141d5af39ba7f35c2136aa1b"},{url:"/next.svg",revision:"8e061864f388b47f33a1c3780831193e"},{url:"/vercel.svg",revision:"c0af2f507b369b085b35ef4bbe3bcf1e"},{url:"/window.svg",revision:"a2760511c65806022ad20adf74370ff3"}],{ignoreURLParametersMatching:[]}),e.cleanupOutdatedCaches(),e.registerRoute("/",new e.NetworkFirst({cacheName:"start-url",plugins:[{cacheWillUpdate:async({request:e,response:s,event:a,state:n})=>s&&"opaqueredirect"===s.type?new Response(s.body,{status:200,statusText:"OK",headers:s.headers}):s}]}),"GET"),e.registerRoute(/^https:\/\/fonts\.(?:gstatic)\.com\/.*/i,new e.CacheFirst({cacheName:"google-fonts-webfonts",plugins:[new e.ExpirationPlugin({maxEntries:4,maxAgeSeconds:31536e3})]}),"GET"),e.registerRoute(/^https:\/\/fonts\.(?:googleapis)\.com\/.*/i,new e.StaleWhileRevalidate({cacheName:"google-fonts-stylesheets",plugins:[new e.ExpirationPlugin({maxEntries:4,maxAgeSeconds:604800})]}),"GET"),e.registerRoute(/\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,new e.StaleWhileRevalidate({cacheName:"static-font-assets",plugins:[new e.ExpirationPlugin({maxEntries:4,maxAgeSeconds:604800})]}),"GET"),e.registerRoute(/\.(?:jpg|jpeg|gif|png|svg|ico|webp)$/i,new e.StaleWhileRevalidate({cacheName:"static-image-assets",plugins:[new e.ExpirationPlugin({maxEntries:64,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\/_next\/image\?url=.+$/i,new e.StaleWhileRevalidate({cacheName:"next-image",plugins:[new e.ExpirationPlugin({maxEntries:64,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:mp3|wav|ogg)$/i,new e.CacheFirst({cacheName:"static-audio-assets",plugins:[new e.RangeRequestsPlugin,new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:mp4)$/i,new e.CacheFirst({cacheName:"static-video-assets",plugins:[new e.RangeRequestsPlugin,new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:js)$/i,new e.StaleWhileRevalidate({cacheName:"static-js-assets",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:css|less)$/i,new e.StaleWhileRevalidate({cacheName:"static-style-assets",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\/_next\/data\/.+\/.+\.json$/i,new e.StaleWhileRevalidate({cacheName:"next-data",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:json|xml|csv)$/i,new e.NetworkFirst({cacheName:"static-data-assets",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(({url:e})=>{if(!(self.origin===e.origin))return!1;const s=e.pathname;return!s.startsWith("/api/auth/")&&!!s.startsWith("/api/")},new e.NetworkFirst({cacheName:"apis",networkTimeoutSeconds:10,plugins:[new e.ExpirationPlugin({maxEntries:16,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(({url:e})=>{if(!(self.origin===e.origin))return!1;return!e.pathname.startsWith("/api/")},new e.NetworkFirst({cacheName:"others",networkTimeoutSeconds:10,plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(({url:e})=>!(self.origin===e.origin),new e.NetworkFirst({cacheName:"cross-origin",networkTimeoutSeconds:10,plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:3600})]}),"GET")});
+// public/sw.js - No Workbox, no precaching issues
+const CACHE_NAME = 'pwa-cache-v2';
+
+// Only cache files that we know exist and are important
+const STATIC_ASSETS = [
+  '/',
+  '/manifest.json'
+  // Don't include _next files as they change frequently
+];
+
+// Install event - minimal caching
+self.addEventListener('install', (event) => {
+  console.log('Service Worker: Installing...');
+  
+  event.waitUntil(
+    caches.open(CACHE_NAME)
+      .then(async (cache) => {
+        console.log('Service Worker: Opened cache');
+        
+        // Only cache files that actually exist
+        const cachePromises = STATIC_ASSETS.map(async (url) => {
+          try {
+            const response = await fetch(url);
+            if (response.ok) {
+              await cache.put(url, response);
+              console.log(`Cached: ${url}`);
+            } else {
+              console.warn(`Failed to cache ${url}: ${response.status}`);
+            }
+          } catch (error) {
+            console.warn(`Error caching ${url}:`, error);
+          }
+        });
+        
+        await Promise.allSettled(cachePromises);
+        console.log('Service Worker: Caching complete');
+      })
+      .then(() => {
+        console.log('Service Worker: Installation complete');
+        return self.skipWaiting(); // Take control immediately
+      })
+      .catch((error) => {
+        console.error('Service Worker: Installation failed:', error);
+      })
+  );
+});
+
+// Activate event - clean up old caches
+self.addEventListener('activate', (event) => {
+  console.log('Service Worker: Activating...');
+  
+  event.waitUntil(
+    Promise.all([
+      // Clean up old caches
+      caches.keys().then((cacheNames) => {
+        return Promise.all(
+          cacheNames.map((cacheName) => {
+            if (cacheName !== CACHE_NAME) {
+              console.log('Service Worker: Deleting old cache:', cacheName);
+              return caches.delete(cacheName);
+            }
+          })
+        );
+      }),
+      // Take control of all clients immediately
+      self.clients.claim()
+    ]).then(() => {
+      console.log('Service Worker: Activation complete');
+    })
+  );
+});
+
+// Fetch event - network-first strategy (no aggressive precaching)
+self.addEventListener('fetch', (event) => {
+  // Skip non-GET requests
+  if (event.request.method !== 'GET') {
+    return;
+  }
+
+  // Skip chrome-extension, data:, blob: URLs
+  if (!event.request.url.startsWith('http')) {
+    return;
+  }
+
+  // Skip analytics and external requests that might cause issues
+  if (event.request.url.includes('analytics') || 
+      event.request.url.includes('wondershare') ||
+      event.request.url.includes('google-analytics') ||
+      event.request.url.includes('gtm')) {
+    return; // Let these requests go through normally
+  }
+
+  event.respondWith(
+    fetch(event.request)
+      .then((response) => {
+        // Only cache successful responses
+        if (response.ok && response.status === 200) {
+          // Clone the response before caching
+          const responseClone = response.clone();
+          
+          // Cache in background (don't block the response)
+          caches.open(CACHE_NAME).then((cache) => {
+            // Only cache certain types of files
+            const url = new URL(event.request.url);
+            if (url.pathname.endsWith('.js') || 
+                url.pathname.endsWith('.css') || 
+                url.pathname.endsWith('.html') ||
+                url.pathname === '/') {
+              cache.put(event.request, responseClone);
+            }
+          }).catch((error) => {
+            console.warn('Cache put failed:', error);
+          });
+        }
+        
+        return response;
+      })
+      .catch(() => {
+        // If network fails, try cache
+        return caches.match(event.request)
+          .then((cachedResponse) => {
+            if (cachedResponse) {
+              console.log('Serving from cache:', event.request.url);
+              return cachedResponse;
+            }
+            
+            // If it's a navigation request and no cache, show offline page
+            if (event.request.destination === 'document') {
+              return new Response(
+                `<!DOCTYPE html>
+                <html lang="en">
+                <head>
+                  <meta charset="utf-8">
+                  <meta name="viewport" content="width=device-width, initial-scale=1">
+                  <title>Offline - PWA</title>
+                  <style>
+                    body {
+                      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                      display: flex;
+                      flex-direction: column;
+                      align-items: center;
+                      justify-content: center;
+                      height: 100vh;
+                      margin: 0;
+                      background: #f5f5f5;
+                      color: #333;
+                      text-align: center;
+                      padding: 20px;
+                    }
+                    .offline-icon {
+                      font-size: 4rem;
+                      margin-bottom: 1rem;
+                    }
+                    h1 {
+                      margin: 0 0 1rem 0;
+                      color: #666;
+                    }
+                    button {
+                      padding: 12px 24px;
+                      background: #007bff;
+                      color: white;
+                      border: none;
+                      border-radius: 6px;
+                      cursor: pointer;
+                      font-size: 16px;
+                      margin-top: 1rem;
+                    }
+                    button:hover {
+                      background: #0056b3;
+                    }
+                  </style>
+                </head>
+                <body>
+                  <div class="offline-icon">📱</div>
+                  <h1>You're offline</h1>
+                  <p>Please check your internet connection and try again.</p>
+                  <button onclick="window.location.reload()">Retry</button>
+                </body>
+                </html>`,
+                {
+                  headers: { 'Content-Type': 'text/html' },
+                  status: 200,
+                  statusText: 'OK'
+                }
+              );
+            }
+            
+            // For other requests, throw error
+            throw new Error('No network and no cache');
+          });
+      })
+  );
+});
+
+// Push event - handle incoming push notifications
+self.addEventListener('push', (event) => {
+  console.log('Service Worker: Push received', event);
+  
+  let notificationData = {
+    title: 'PWA Notification',
+    body: 'You have a new message',
+    icon: '/icon-192x192.png',
+    badge: '/badge-72x72.png',
+    tag: 'push-notification',
+    requireInteraction: false,
+    data: {
+      url: '/'
+    }
+  };
+
+  // Parse push data if available
+  if (event.data) {
+    try {
+      const pushData = event.data.json();
+      notificationData = { ...notificationData, ...pushData };
+      console.log('Push data:', pushData);
+    } catch (error) {
+      console.error('Error parsing push data:', error);
+      notificationData.body = event.data.text() || notificationData.body;
+    }
+  }
+
+  const notificationPromise = self.registration.showNotification(
+    notificationData.title,
+    {
+      body: notificationData.body,
+      icon: notificationData.icon,
+      badge: notificationData.badge,
+      tag: notificationData.tag,
+      requireInteraction: notificationData.requireInteraction,
+      data: notificationData.data,
+      vibrate: [200, 100, 200],
+      actions: [
+        {
+          action: 'open',
+          title: 'Open App',
+          icon: '/icon-192x192.png'
+        },
+        {
+          action: 'close',
+          title: 'Close',
+          icon: '/icon-192x192.png'
+        }
+      ]
+    }
+  );
+
+  event.waitUntil(notificationPromise);
+});
+
+// Notification click event
+self.addEventListener('notificationclick', (event) => {
+  console.log('Notification clicked:', event);
+  
+  event.notification.close();
+
+  if (event.action === 'close') {
+    return; // Just close the notification
+  }
+
+  const urlToOpen = event.notification.data?.url || '/';
+  
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true })
+      .then((clientList) => {
+        // Try to find an existing window to focus
+        for (const client of clientList) {
+          if (client.url.includes(self.location.origin) && 'focus' in client) {
+            client.focus();
+            if (client.navigate && urlToOpen !== '/') {
+              return client.navigate(urlToOpen);
+            }
+            return client;
+          }
+        }
+        
+        // No existing window found, open a new one
+        if (self.clients.openWindow) {
+          return self.clients.openWindow(urlToOpen);
+        }
+      })
+      .catch((error) => {
+        console.error('Error handling notification click:', error);
+      })
+  );
+});
+
+// Handle service worker messages
+self.addEventListener('message', (event) => {
+  console.log('Service Worker: Message received', event.data);
+  
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
+// Error handling
+self.addEventListener('error', (event) => {
+  console.error('Service Worker error:', event.error);
+});
+
+self.addEventListener('unhandledrejection', (event) => {
+  console.error('Service Worker unhandled rejection:', event.reason);
+  event.preventDefault(); // Prevent the error from bubbling up
+});
+
+console.log('Service Worker: Script loaded');
