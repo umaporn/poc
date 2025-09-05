@@ -51,8 +51,8 @@ export default function Home() {
     }
 
     // Check environment variables
-    if (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY) {
-      addDebugLog(`VAPID key found: ${process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY.substring(0, 20)}...`, 'success');
+    if (process.env.VAPID_PUBLIC_KEY) {
+      addDebugLog(`VAPID key found: ${process.env.VAPID_PUBLIC_KEY.substring(0, 20)}...`, 'success');
     } else {
       addDebugLog("VAPID key NOT found in environment variables", 'error');
     }
