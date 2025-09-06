@@ -1,5 +1,5 @@
 {
-  "name": "Next.js PWA Push Demo",
+  "name": "PWA WEB Push",
   "short_name": "PWA WEB Push",
   "start_url": "/pwa",
   "display": "standalone",

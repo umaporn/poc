@@ -4,11 +4,18 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [subscription, setSubscription] = useState<PushSubscription | null>(null);
 
-  // Register service worker
+  // Register service worker and check existing subscription
   useEffect(() => {
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js").then((reg) => {
+      navigator.serviceWorker.register("/sw.js").then(async (reg) => {
         console.log("Service Worker registered:", reg);
+        
+        // Check if already subscribed
+        const existingSub = await reg.pushManager.getSubscription();
+        if (existingSub) {
+          setSubscription(existingSub);
+          console.log("Existing subscription found:", existingSub);
+        }
       });
     }
   }, []);
@@ -52,6 +59,48 @@ export default function Home() {
     }
   }
 
+  async function unsubscribe() {
+    try {
+      if (!subscription) {
+        console.log("No subscription to unsubscribe from");
+        return;
+      }
+
+      // Unsubscribe from push manager
+      const success = await subscription.unsubscribe();
+      
+      if (success) {
+        console.log("Successfully unsubscribed from push notifications");
+
+        // Notify server to remove subscription
+        try {
+          const response = await fetch("/api/send-notification", {
+            method: "POST",
+            body: JSON.stringify({ unsubscribe: subscription }),
+            headers: { "Content-Type": "application/json" },
+          });
+
+          if (response.ok) {
+            console.log("Server notified of unsubscription");
+          } else {
+            console.warn("Failed to notify server of unsubscription, but local unsubscribe succeeded");
+          }
+        } catch (serverError) {
+          console.warn("Failed to notify server of unsubscription:", serverError);
+        }
+
+        // Clear local subscription state
+        setSubscription(null);
+        alert("Successfully unsubscribed from notifications");
+      } else {
+        throw new Error("Failed to unsubscribe");
+      }
+    } catch (error) {
+      console.error("Unsubscription failed:", error);
+      alert("Failed to unsubscribe. Please try again.");
+    }
+  }
+
   async function sendNotification() {
     try {
       const response = await fetch("/api/send-notification", {
@@ -73,15 +122,26 @@ export default function Home() {
 
   return (
     <main className="p-6 flex flex-col gap-4">
+      <link rel="manifest" href="/manifest.json" /> 
       <h1 className="text-2xl font-bold">🔔 Next.js Push Demo</h1>
 
-      <button
-        onClick={subscribe}
-        className="px-4 py-2 bg-blue-500 text-white rounded"
-        disabled={!!subscription}
-      >
-        {subscription ? "Subscribed ✓" : "Subscribe"}
-      </button>
+      <div className="flex gap-2">
+        <button
+          onClick={subscribe}
+          className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
+          disabled={!!subscription}
+        >
+          {subscription ? "Subscribed ✓" : "Subscribe"}
+        </button>
+
+        <button
+          onClick={unsubscribe}
+          className="px-4 py-2 bg-red-500 text-white rounded disabled:opacity-50"
+          disabled={!subscription}
+        >
+          Unsubscribe
+        </button>
+      </div>
 
       <button
         onClick={sendNotification}
