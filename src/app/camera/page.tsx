@@ -1,10 +1,12 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { Icon } from '@iconify/react';
+import { Icon } from "@iconify/react";
 
 export default function CameraTogglePage() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
   const [error, setError] = useState<string | null>(null);
   const [facingMode, setFacingMode] = useState<"user" | "environment">("user");
   const [photos, setPhotos] = useState<string[]>([]);
@@ -24,7 +26,7 @@ export default function CameraTogglePage() {
     }
 
     initCamera();
- 
+
     return () => {
       if (videoRef.current?.srcObject) {
         (videoRef.current.srcObject as MediaStream)
@@ -55,9 +57,28 @@ export default function CameraTogglePage() {
     }
   };
 
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files && files[0]) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target?.result) {
+          setPhotos((prev) => [...prev, e.target!.result as string]);
+        }
+      };
+      reader.readAsDataURL(files[0]);
+    }
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4 ">
-      <h1 className="text-xl font-bold mb-4 text-black">{facingMode === "user" ? "Front" : "Back"} Camera</h1>
+      <h1 className="text-xl font-bold mb-4 text-black">
+        {facingMode === "user" ? "Front" : "Back"} Camera
+      </h1>
 
       {error ? (
         <p className="text-red-500">{error}</p>
@@ -70,12 +91,16 @@ export default function CameraTogglePage() {
         />
       )}
 
-      <div className="flex gap-4 mt-4">
+      <div className="flex flex-wrap justify-center gap-4 mt-4">
         <button
           onClick={toggleCamera}
           className="px-4 py-2 bg-blue-400 text-white rounded-lg shadow-md flex items-center gap-2 hover:bg-blue-500 hover:cursor-pointer transition"
         >
-					<Icon icon="material-symbols:cameraswitch-rounded" width="56" height="56" />
+          <Icon
+            icon="material-symbols:cameraswitch-rounded"
+            width="32"
+            height="32"
+          />
           Switch to {facingMode === "user" ? "Back" : "Front"} Camera
         </button>
 
@@ -83,22 +108,38 @@ export default function CameraTogglePage() {
           onClick={capturePhoto}
           className="px-4 py-2 bg-emerald-500 text-white rounded-lg shadow-md flex items-center gap-2 hover:bg-emerald-700 hover:cursor-pointer transition"
         >
-          <Icon icon="f7:camera" width="56" height="56" />
-					 Capture
+          <Icon icon="f7:camera" width="32" height="32" />
+          Capture
         </button>
+
+        <button
+          onClick={handleUploadClick}
+          className="px-4 py-2 bg-purple-500 text-white rounded-lg shadow-md flex items-center gap-2 hover:bg-purple-700 hover:cursor-pointer transition"
+        >
+          <Icon icon="mdi:upload" width="32" height="32" />
+          Upload
+        </button>
+
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={handleFileChange}
+        />
       </div>
 
       <canvas ref={canvasRef} className="hidden" />
 
       {photos.length > 0 && (
         <div className="mt-6 w-full max-w-md">
-          <h2 className="text-lg font-semibold mb-2">Captured Photos:</h2>
+          <h2 className="text-lg font-semibold mb-2">Captured & Uploaded Photos:</h2>
           <div className="grid grid-cols-2 gap-2">
             {photos.map((photo, index) => (
               <img
                 key={index}
                 src={photo}
-                alt={`Captured ${index + 1}`}
+                alt={`Photo ${index + 1}`}
                 className="rounded-lg shadow-md"
               />
             ))}

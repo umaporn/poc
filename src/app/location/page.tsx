@@ -32,7 +32,7 @@ export default function LocationPage() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gray-50">
-      <h1 className="text-2xl font-bold mb-4 text-black">Get Location (PWA + Google Maps)</h1>
+      <h1 className="text-2xl font-bold mb-4 text-black">Get Location And </h1>
 
       <button
         onClick={getLocation}
