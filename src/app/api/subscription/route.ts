@@ -20,18 +20,18 @@ export async function POST(req: Request) {
   if (body.subscribe) {
     const { endpoint, keys } = body.subscribe;
 
-    await prisma.subscription.upsert({
-      where: { endpoint },
-      update: {
-        p256dh: keys.p256dh,
-        auth: keys.auth,
-      },
-      create: {
-        endpoint,
-        p256dh: keys.p256dh,
-        auth: keys.auth,
-      },
-    });
+    //await prisma.subscription.upsert({
+    //  where: { endpoint },
+    //  update: {
+    //    p256dh: keys.p256dh,
+    //    auth: keys.auth,
+    //  },
+    //  create: {
+    //    endpoint,
+    //    p256dh: keys.p256dh,
+    //    auth: keys.auth,
+    //  },
+    //});
 
     console.log("Saved subscription:", endpoint);
 
