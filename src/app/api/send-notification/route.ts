@@ -20,7 +20,7 @@ export async function POST(req: Request) {
   if (body.subscription) {
     const { endpoint, keys } = body.subscription;
 
-    await prisma.subscriptions.upsert({
+    await prisma.subscription.upsert({
       where: { endpoint },
       update: {},
       create: {
@@ -35,7 +35,7 @@ export async function POST(req: Request) {
 
   // Send test notification
   if (body.send) {
-    const subs = await prisma.subscriptions.findMany();
+    const subs = await prisma.subscription.findMany();
 
     const payload = JSON.stringify({
       title: "Next.js Push Demo 🚀",
