@@ -16,14 +16,18 @@ export default function Home() {
   const openGeolocation = () => {
     window.location.href = "/location";
   }
+  const openQRCodeGenerator = () => {
+    window.location.href = "/gen-qr-code";
+  }
 
   // List of issues
   const issues = [
     { id: 1, title: "Web Push Notification", action: () => openPWA() },
     { id: 2, title: "Get Device ID", action: () => getDeviceId() },
     { id: 3, title: "Scan QR Code", action: () => openQRCodeScanner() },
+    { id: 3, title: "Generate QR Code", action: () => openQRCodeGenerator() },
     { id: 4, title: "Open Camera", action: () => openCamera() },
-    { id: 4, title: "GEt Geolocation", action: () => openGeolocation() },
+    { id: 4, title: "Get Geolocation", action: () => openGeolocation() },
   ];
 
   return (

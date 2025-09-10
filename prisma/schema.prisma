@@ -1,16 +1,17 @@
-datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
-}
-
+// prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
 
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
 model Subscription {
-  id         Int      @id @default(autoincrement())
-  endpoint   String   @unique
-  p256dh     String
-  auth       String
-  createdAt  DateTime @default(now())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  endpoint  String   @unique
+  auth      String
+  p256dh    String
+  createdAt DateTime @default(now())
 }
