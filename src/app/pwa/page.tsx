@@ -89,14 +89,14 @@ export default function Home() {
         userVisibleOnly: true,
         applicationServerKey: urlBase64ToUint8Array(vapidKey),
       });
-
+      
       addLog("✅ Push subscription created successfully", 'success');
       addLog(`📍 New subscription endpoint: ${sub.endpoint.substring(0, 50)}...`);
       addLog(`🔐 Keys present - p256dh: ${!!sub.getKey('p256dh')}, auth: ${!!sub.getKey('auth')}`);
 
       // Send subscription to server
       addLog("📤 Sending subscription to server...");
-      const response = await fetch("/api/send-notification", {
+      const response = await fetch("/api/subscription", {
         method: "POST",
         body: JSON.stringify({ subscribe: sub }),
         headers: { "Content-Type": "application/json" },

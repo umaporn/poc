@@ -13,6 +13,9 @@ export default function Home() {
   const openPWA = () => {
     window.location.href = "/pwa";
   }
+  const openGeolocation = () => {
+    window.location.href = "/location";
+  }
 
   // List of issues
   const issues = [
@@ -20,6 +23,7 @@ export default function Home() {
     { id: 2, title: "Get Device ID", action: () => getDeviceId() },
     { id: 3, title: "Scan QR Code", action: () => openQRCodeScanner() },
     { id: 4, title: "Open Camera", action: () => openCamera() },
+    { id: 4, title: "GEt Geolocation", action: () => openGeolocation() },
   ];
 
   return (

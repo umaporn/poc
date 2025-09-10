@@ -12,20 +12,11 @@ webpush.setVapidDetails(
   vapidKeys.privateKey
 );
 
-// ❗ In-memory store (resets on server restart)
 // Replace with DB or Redis in production
 let subscriptions: any[] = [];
 
 export async function POST(req: Request) {
   const body = await req.json();
-
-  // Save subscription
-  if (body.subscribe) {
-    subscriptions.push(body.subscribe);
-    console.log("New subscription saved:", body.subscribe.endpoint);
-    return NextResponse.json({ success: true });
-  }
-
   // Send test notification
   if (body.send) {
     const payload = JSON.stringify({
